@@ -29,7 +29,8 @@ def ftxSwag():
     print(r_json)
     stickerID = ""
     if r_json['success'] == True:
-        if r_json['error'] == False:
+        #if r_json['error'] == False:
+        if r_json['result'] == False:
             telegramMessage = "FTX Swag: \r\ndraw `nothing`, keep trying..."
             stickerID = "CAACAgUAAxkBAAPmYOn8C4ZrnO1qJfdPdtQ-ai9FqaUAAgMFAAIl4OsOkcL1sIIVUQYgBA"
         else:
@@ -128,10 +129,38 @@ def shopeeCoin():
         tgMessage("Shopee:\r\nsomething wrong...")
 
 
+def coinmarketcapDiamond():
+    print("get coinmarketcap diamonds")
+    config  = configparser.ConfigParser()
+    config.read('config/credential.ini')
+    Authorization = config['coinmarketcap']['Authorization']
+    coinmarketcapHeaders = {'Authorization':Authorization, 'Content-Type':"application/json;charset=UTF-8"}
+    coinmarketcapData = "{}"
+    responseCoinmarketcapCheckin = requests.post("https://api.coinmarketcap.com/asset/v3/loyalty/check-in/", headers=coinmarketcapHeaders, data=coinmarketcapData)
+    jsonCoinmarketcapCheckin = json.loads(responseCoinmarketcapCheckin.text)
+    stickerID = ""
+    if jsonCoinmarketcapCheckin["status"]["error_message"] == "SUCCESS":
+        tmpMessage = "Coinmarketcap:\r\nGet coinmarketcap diamonds"
+        stickerID = "CAACAgUAAxkBAAIBNGDrS34d43ol_OgGEQK67zYV5lN-AAIEBQACJeDrDr5dyWExsEgYIAQ"
+        #tgSticker("CAACAgUAAxkBAAIBNGDrS34d43ol_OgGEQK67zYV5lN-AAIEBQACJeDrDr5dyWExsEgYIAQ")
+    elif jsonCoinmarketcapCheckin["status"]["error_message"] == "The userId and checkIn date is unique,you can't check in twice a day":
+        tmpMessage = "Coinmarketcap:\r\nWait tomorrow"
+    else:
+        tgMessage("Coinmarketcap:\r\nsometime error please check.")
+    #print(jsonCoinmarketcap.text)
+    coinmarketcapCandyAmount = requests.post("https://api.coinmarketcap.com/asset/v3/loyalty/user-point-summary", headers=coinmarketcapHeaders, data=coinmarketcapData)
+    jsonCoinmarketcapCandyAmount = json.loads(coinmarketcapCandyAmount.text)
+    DiamondAmount = jsonCoinmarketcapCandyAmount["data"]["point"]
+    tgMessage(tmpMessage + ", now have `" + str(DiamondAmount) + "`")
+    if stickerID != "":
+        tgSticker(stickerID)
+
+
 def main():
     ftxSwag()
     coingeckoCandy()
     shopeeCoin()
+    coinmarketcapDiamond()
 
 if __name__ == "__main__":
 	if len(sys.argv) < 1:
