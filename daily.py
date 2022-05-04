@@ -13,7 +13,7 @@ import configparser
 from bs4 import BeautifulSoup
 import json
 
-from libary.telegram import tgMessage, tgSticker
+from libary.telegram import tgMessage, tgMessageHeartbeat, tgSticker
 
 burp_proxies = {"http":"http://192.168.10.102:8080","https":"http://192.168.10.102:8080"}
 
@@ -41,10 +41,12 @@ def ftxSwag():
         #stickerID = "CAACAgUAAxkBAAIBLGDrMQfk-2PWz5O0rg1hbBwxZ7DKAAJAEgAC1x2LBieD-RRfxNlZIAQ"
     else:
         telegramMessage = "FTX Swag: \r\nOther error occur, please check status"
-    tgMessage(telegramMessage)
+    
     if stickerID != "":
         tgSticker(stickerID)
-
+        tgMessage(telegramMessage)
+    else:
+        tgMessageHeartbeat(telegramMessage)
 
 def coingeckoCandy():
     # get coingecko daily candy
@@ -70,7 +72,7 @@ def coingeckoCandy():
     if getCandy.status_code == 200:
         getCandyStatus = "Get candy process ok"
     else:
-        getCandyStatus = "Get candy fail, please check status: " + getCandy.status_code
+        getCandyStatus = "Get candy fail, please check status: " + str(getCandy.status_code)
     # After retrive
     getCandyAmount = requests.get("https://www.coingecko.com/account/candy?locale=en", cookies=coingecgo_cookie, headers=coingecgo_header)
     sp = BeautifulSoup(getCandyAmount.text, 'html.parser')
@@ -88,10 +90,12 @@ def coingeckoCandy():
         candyAmountToday = s.text
     telegramMessage = "CoinGecko Candy: \r\n"+ "Candy amount: `" + candyAmount + "`"
     #telegramMessage = "CoinGecko Candy: \r\n"+ "Candy amount: `" + candyAmount + "`\r\n" + getCandyMessage + "\r\n" + candyAmountToday + "\r\n"
-    #telegramMessage += getCandyStatus
-    tgMessage(telegramMessage)
+    #telegramMessage += getCandyStatus    
     if getCandy != 0:
         tgSticker("CAACAgUAAxkBAAIBNGDrS34d43ol_OgGEQK67zYV5lN-AAIEBQACJeDrDr5dyWExsEgYIAQ")
+        tgMessage(telegramMessage)
+    else:
+        tgMessageHeartbeat(telegramMessage)
 
 
 def shopeeCoin():
@@ -123,7 +127,7 @@ def shopeeCoin():
             tgSticker("CAACAgUAAxkBAAIBNGDrS34d43ol_OgGEQK67zYV5lN-AAIEBQACJeDrDr5dyWExsEgYIAQ")
         else:
             #print("Shopee:\r\nWait tomorrow")
-            tgMessage("shopee:\r\nWait tomorrow, now have `" + str(shpoeeCoinAmount) + "`")
+            tgMessageHeartbeat("shopee:\r\nWait tomorrow, now have `" + str(shpoeeCoinAmount) + "`")
     else:
         #print("Shopee:\r\nsomething wrong...")
         tgMessage("Shopee:\r\nsomething wrong...")
@@ -146,7 +150,7 @@ def coinmarketcapDiamond():
     elif jsonCoinmarketcapCheckin["status"]["error_message"] == "The userId and checkIn date is unique,you can't check in twice a day":
         tmpMessage = "Coinmarketcap:\r\nWait tomorrow"
     else:
-        tgMessage("Coinmarketcap:\r\nsometime error please check.")
+        tmpMessage = "Coinmarketcap:\r\nsometime error please check"
     #print(jsonCoinmarketcap.text)
     coinmarketcapCandyAmount = requests.post("https://api.coinmarketcap.com/asset/v3/loyalty/user-point-summary", headers=coinmarketcapHeaders, data=coinmarketcapData)
     jsonCoinmarketcapCandyAmount = json.loads(coinmarketcapCandyAmount.text)
@@ -158,9 +162,9 @@ def coinmarketcapDiamond():
 
 def main():
     ftxSwag()
-    coingeckoCandy()
+    #coingeckoCandy()
     shopeeCoin()
-    coinmarketcapDiamond()
+    #coinmarketcapDiamond()
 
 if __name__ == "__main__":
 	if len(sys.argv) < 1:

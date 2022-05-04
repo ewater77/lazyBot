@@ -1,8 +1,12 @@
 [bot_credential]
-bot_token = your token
+bot_token = 
 
 [chat_id]
-private_chat_id = your chat_id
+private_chat_id = 
+
+[lazy_bot_credential]
+bot_token = 
+private_chat_id = 
 
 #再一個就好 CAACAgUAAxkBAAPmYOn8C4ZrnO1qJfdPdtQ-ai9FqaUAAgMFAAIl4OsOkcL1sIIVUQYgBA
 #恭喜發財 CAACAgUAAxkBAAPqYOn-qbLYXOMdG3PPuY0g_3vH0igAAhcFAAIl4OsOYOQIRar6TdAgBA

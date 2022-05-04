@@ -1,19 +1,22 @@
 # lazybot
 
 ## daily
-coingecko candy
+~coingecko candy~
 
-coinmarketcap diamond
+~coinmarketcap diamond~
 
 ftx swag NFT
 
 shopee coin
+
+Cookie Run coupon
 
 ## crontab edit
 crontab -e
 
 ```
 0 *  *   *   *     cd /home/ewater/Documents/lazyBot/ && python3 /home/ewater/Documents/lazyBot/daily.py
+0 *  *   *   *     cd /home/ewater/Documents/lazyBot/ && python3 /home/ewater/Documents/lazyBot/event.py
 ```
 
 ## telegram sticker
@@ -27,3 +30,6 @@ crontab -e
 * 這一顆真的很棒 CAACAgUAAxkBAAIBNGDrS34d43ol_OgGEQK67zYV5lN-AAIEBQACJeDrDr5dyWExsEgYIAQ
 
 send sticker to your bot and check https://api.telegram.org/bot'YourTelegramBotToken'/getUpdates to get file_id as sticker id
+
+## todo
+* shopee auto login
